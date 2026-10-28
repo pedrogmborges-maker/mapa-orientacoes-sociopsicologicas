@@ -1,0 +1,14 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {calculate,type Answers} from './calculate';
+import {items,orderedItems} from './items';
+const base=(values=[1,1,1,1,1,1,1]):Answers=>Object.fromEntries(items.map(i=>[i.id,values[Math.floor((i.id-1)/5)]]));
+const close=(a:number|null,b:number)=>assert.ok(a!==null&&Math.abs(a-b)<1e-10,`${a} != ${b}`);
+test('35 unique items and deterministic interleaving',()=>{assert.equal(items.length,35);assert.equal(new Set(orderedItems.map(i=>i.id)).size,35);assert.deepEqual(orderedItems.slice(0,5).map(i=>i.id),[1,6,11,16,21]);});
+test('null is excluded, missing differs from zero, four required',()=>{const a=base();a[1]=null;close(calculate(a).scores[0].mean,1);assert.equal(calculate(a).scores[0].n,4);a[2]=undefined;assert.equal(calculate(a).scores[0].mean,null);assert.equal(calculate(a).ie,null);assert.equal(calculate(a).qd,null);assert.equal(calculate(a).sequence,null);});
+test('all zero cannot normalize',()=>{const r=calculate(base([0,0,0,0,0,0,0]));assert.equal(r.normalized,null);assert.equal(r.ie,null);assert.equal(r.sum,0);});
+test('equal positive means',()=>{const r=calculate(base());r.normalized!.forEach(d=>close(d.value,4));close(r.ie,0);close(r.qd,112);assert.equal(r.sequence,'(R/M/A/C/D/P/E)');});
+test('single positive dimension extremes',()=>{for(const [index,ie,qd] of [[0,84,140],[6,-84,168],[5,-56,196],[3,0,28]]){const v=[0,0,0,0,0,0,0];v[index]=4;const r=calculate(base(v));close(r.ie,ie);close(r.qd,qd);}});
+test('historical distribution and normalization sum',()=>{const means=[1,5,2,4,3,7,6].map(v=>v/2);const r=calculate(base(means));/* calculation accepts integer item responses, so construct exact means below */const a:Answers={};items.forEach(i=>{const target=means[Math.floor((i.id-1)/5)];const k=(i.id-1)%5;a[i.id]=k===4?null:k<2?Math.floor(target):Math.ceil(target);});const result=calculate(a);close(result.ie,-20);close(result.qd,125);close(result.normalized!.reduce((s,d)=>s+d.value,0),28);});
+test('exact ties are preserved without rounding',()=>{const a=base([1,2,3,4,2,1,0]);assert.ok(calculate(a).sequence!.includes('(M/D)'));assert.ok(calculate(a).sequence!.includes('(R/P)'));a[1]=2;assert.ok(!calculate(a).sequence!.includes('(R/P)'));});
+test('relative coefficients unchanged by proportional means',()=>{const a=calculate(base([1,1,0,2,0,1,2]));const b=calculate(base([2,2,0,4,0,2,4]));close(a.ie,b.ie!);close(a.qd,b.qd!);});

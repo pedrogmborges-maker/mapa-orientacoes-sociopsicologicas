@@ -1,0 +1,12 @@
+export const dimensions = [
+ {id:'R', name:'Religião', short:'O sentido e o sagrado', description:'referências religiosas, espirituais e relação com o sagrado', interpretation:'presença de referências religiosas ou espirituais nas escolhas e no sentido atribuído à vida', ie:3, qd:5},
+ {id:'M', name:'Moral', short:'Os princípios e o outro', description:'princípios éticos e compromissos interpessoais', interpretation:'presença de princípios éticos, compromissos e consideração pelas consequências interpessoais', ie:2, qd:3},
+ {id:'A', name:'Arte', short:'A criação e a sensibilidade', description:'criação, expressão e experiência estética', interpretation:'presença de experiências artísticas, expressão e critérios estéticos', ie:1, qd:2},
+ {id:'C', name:'Ciência', short:'A investigação e a descoberta', description:'investigação, evidências e revisão de explicações', interpretation:'presença de investigação, comparação de explicações e consideração de evidências', ie:0, qd:1},
+ {id:'D', name:'Direito', short:'As regras e as garantias', description:'direitos, deveres, regras e procedimentos', interpretation:'presença de regras, direitos, deveres e procedimentos formais', ie:-1, qd:4},
+ {id:'P', name:'Política', short:'A participação e o coletivo', description:'participação, negociação e influência nas decisões coletivas', interpretation:'presença de participação, negociação e influência em decisões coletivas', ie:-2, qd:7},
+ {id:'E', name:'Economia', short:'Os recursos e as possibilidades', description:'organização de recursos e viabilidade material', interpretation:'presença de organização de recursos e consideração da viabilidade material', ie:-3, qd:6}
+] as const;
+export type Dimension = typeof dimensions[number]['id'];
+export const notice = 'Este questionário é exploratório e não constitui teste psicológico validado. Os resultados descrevem suas respostas atuais e não permitem diagnóstico, avaliação de capacidade ou classificação definitiva da personalidade.';
+export const reflections = ['Quais pessoas, grupos ou instituições mais influenciaram essas orientações?','Quais delas você pratica por escolha e quais por necessidade?','Existe algum campo que gostaria de desenvolver, mas para o qual faltam tempo, recursos ou oportunidades?','Em que situações duas dessas orientações entram em conflito?','O resultado muda quando você pensa na família, no trabalho ou em outros grupos?'];
