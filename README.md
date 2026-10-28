@@ -29,6 +29,14 @@ npm run dev
 
 Abra a URL exibida pelo Vite. Para verificar: `npm test` e `npm run build`. A compilação estática fica em `dist/`.
 
+## Publicação no GitHub Pages
+
+O workflow `.github/workflows/pages.yml` testa, compila e publica o site a cada envio para `main`, ou por execução manual em Actions. Em Settings → Pages, a origem deve ser GitHub Actions. No plano gratuito, o repositório precisa ser público; em um repositório privado, é necessário um plano que ofereça Pages para esse tipo de repositório.
+
+A compilação do workflow usa `--base /<nome-do-repositório>/` para carregar corretamente JavaScript e CSS no endereço do GitHub Pages. A compilação normal e o servidor local mantêm a base `/`. O workflow envia apenas `dist/` como site, sem os arquivos de desenvolvimento.
+
+Endereço previsto depois de uma publicação bem-sucedida: `https://pedrogmborges-maker.github.io/mapa-orientacoes-sociopsicologicas/`. A presença deste endereço no README não confirma a conclusão da publicação.
+
 ## Limites da adaptação
 
 1. Os sete processos e os pesos dos coeficientes IE e QD são conceitos históricos, utilizados conforme a especificação fornecida.
