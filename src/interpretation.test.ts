@@ -1,0 +1,13 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {calculate,type Answers} from './calculate';
+import {interpret} from './interpretation';
+import {items} from './items';
+const answers=(means:number[]):Answers=>Object.fromEntries(items.map(i=>[i.id,means[Math.floor((i.id-1)/5)]]));
+test('no valid data produces no invented profile',()=>{const r=interpret(calculate({}));assert.deepEqual(r.highlights,[]);assert.equal(r.connection,null);assert.match(r.summary,/não há campos/);});
+test('all zero and equal positive are distinct, with no predominance',()=>{const zero=interpret(calculate(answers([0,0,0,0,0,0,0])));const equal=interpret(calculate(answers([2,2,2,2,2,2,2])));assert.match(zero.summary,/Todas as médias foram zero/);assert.match(equal.summary,/Não há predominância/);assert.deepEqual(equal.highlights,[]);assert.equal(equal.connection,null);});
+test('a tied leading group is preserved in full',()=>{const r=interpret(calculate(answers([1,4,4,4,2,0,0])));assert.deepEqual(r.highlights.map(h=>h.id),['M','A','C']);assert.equal(r.connection,null);});
+test('two exact leaders receive an editorial question',()=>{const r=interpret(calculate(answers([1,4,0,4,1,0,0])));assert.equal(r.connection?.title,'Moral e Ciência');assert.match(r.connection!.question,/evidências/);assert.match(r.connection!.text,/compartilharam/);});
+test('unique top two have a combination but a tied second group is not split',()=>{assert.ok(interpret(calculate(answers([1,3,0,4,2,0,0]))).connection);assert.equal(interpret(calculate(answers([1,3,0,4,3,0,0]))).connection,null);});
+test('partial data is explicitly limited and a sole valid field is not dominant',()=>{const a=answers([1,2,3,4,1,2,3]);for(const i of items)if(i.dimension!=='C')a[i.id]=null;const r=interpret(calculate(a));assert.match(r.scope,/Leitura parcial: 1 de 7/);assert.match(r.summary,/não pode ser chamado de predominante/);assert.equal(r.connection,null);});
+test('every possible leading pair has a question',()=>{for(let a=0;a<7;a++)for(let b=a+1;b<7;b++){const v=[0,0,0,0,0,0,0];v[a]=4;v[b]=4;assert.ok(interpret(calculate(answers(v))).connection,`${a}/${b}`);}});

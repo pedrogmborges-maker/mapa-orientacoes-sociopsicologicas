@@ -1,5 +1,13 @@
 # Mapa de Orientações Sociopsicológicas — Piloto 0.1
 
+## Leitura automática do perfil
+
+O relatório inclui uma descrição por regras locais, sem IA generativa, API, chave ou custo por análise. `src/interpretation.ts` contém os textos contemporâneos e a função pura; `src/ProfileReading.tsx` apresenta a leitura e participa da impressão. Os textos não são citações nem classificações de Pontes de Miranda.
+
+A leitura preserva todos os empates exatos na maior média. Se houver exatamente dois campos empatados no topo, apresenta uma pergunta sobre essa combinação. Se houver um primeiro e um segundo isolados, e o segundo tiver média positiva, apresenta uma pergunta sobre ambos. Empates maiores não são divididos para escolher arbitrariamente um par. Existem perguntas para os 21 pares possíveis. Essas perguntas sugerem reflexão; não comprovam conflitos ou comportamentos.
+
+Resultados iguais, zero ou insuficientes têm mensagens específicas. Dados parciais são identificados e não geram uma descrição do conjunto completo. Não há faixas de personalidade, previsões ou interpretações de traços com base em IE e QD. A posição nas médias não equivale a diferença psicológica relevante. A leitura é editorial e exploratória, sem validação psicométrica.
+
 Aplicação React e TypeScript. Todos os dados permanecem na memória da página. Não há cadastro, analytics, envio de respostas, cookies nem armazenamento automático. Fechar ou recarregar apaga as respostas. Imprimir ou salvar PDF exige ação do participante.
 
 ## Executar
